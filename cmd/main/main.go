@@ -11,11 +11,10 @@ import (
 
 type config struct {
 	roomCode string
-	name     string
 	delay    int
 }
 
-type bot struct {
+type app struct {
 	server string
 	logger *slog.Logger
 	cfg    config
@@ -27,7 +26,6 @@ func main() {
 	var cfg config
 
 	flag.StringVar(&cfg.roomCode, "code", "", "room code")
-	flag.StringVar(&cfg.name, "name", "bot", "bot name")
 	flag.IntVar(&cfg.delay, "delay", 2000, "delay between bot connections in ms")
 	flag.Parse()
 
@@ -41,7 +39,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	b := bot{
+	b := app{
 		logger: logger,
 		cfg:    cfg,
 	}
@@ -49,7 +47,7 @@ func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
-	b.logger.Info("running bot", "room code", b.cfg.roomCode, "delay", b.cfg.delay)
+	b.logger.Info("running bots", "room code", b.cfg.roomCode, "delay", b.cfg.delay)
 	if err := b.run(ctx); err != nil {
 		logger.Error(err.Error())
 		os.Exit(1)

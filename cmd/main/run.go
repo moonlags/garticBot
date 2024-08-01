@@ -2,33 +2,38 @@ package main
 
 import (
 	"context"
-	"log/slog"
-	"math/rand"
 	"time"
+
+	"github.com/moonlags/garticBot/internal/entity"
 )
 
-func (b *bot) run(ctx context.Context) error {
-	if err := b.findServer(); err != nil {
+func (app *app) run(ctx context.Context) error {
+	if err := app.findServer(); err != nil {
 		return err
 	}
 
 	for {
 		select {
 		case <-ctx.Done():
-			b.logger.Info("stopping bot")
+			app.logger.Info("stopping bots")
 			return nil
-		case <-time.After(time.Millisecond * time.Duration(b.cfg.delay)):
-			sid, err := b.getSid()
-			if err != nil {
-				return err
-			}
+		case <-time.After(time.Millisecond * time.Duration(app.cfg.delay)):
+			// sid, err := b.getSid()
+			// if err != nil {
+			// 	return err
+			// }
 
-			slog.Info("got session id", "sid", sid)
+			bot := entity.NewBot(app.server, app.cfg.roomCode, app.logger)
 
-			if err := b.sendData(sid, rand.Intn(46)); err != nil {
-				return err
-			}
-			slog.Info("joined the game", "sid", sid)
+			// go bot.Join()
+			bot.Join()
+
+			// slog.Info("got session id", "sid", sid)
+
+			// if err := b.sendData(sid, rand.Intn(46)); err != nil {
+			// 	return err
+			// }
+			// slog.Info("joined the game", "sid", sid)
 		}
 	}
 }
