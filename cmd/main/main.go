@@ -12,6 +12,7 @@ import (
 type config struct {
 	roomCode string
 	delay    int
+	name     string
 }
 
 type app struct {
@@ -27,6 +28,8 @@ func main() {
 
 	flag.StringVar(&cfg.roomCode, "code", "", "room code")
 	flag.IntVar(&cfg.delay, "delay", 2000, "delay between bot connections in ms")
+	flag.StringVar(&cfg.name, "name", "bot", "name of the bot")
+
 	flag.Parse()
 
 	if cfg.roomCode == "" {

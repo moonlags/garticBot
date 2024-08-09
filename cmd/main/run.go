@@ -23,7 +23,7 @@ func (app *app) run(ctx context.Context) error {
 			// 	return err
 			// }
 
-			bot := entity.NewBot(app.server, app.cfg.roomCode, app.logger)
+			bot := entity.NewBot(app.server, app.cfg.roomCode, app.cfg.name, app.logger)
 
 			// go bot.Join()
 			bot.Join()

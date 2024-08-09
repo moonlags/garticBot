@@ -15,18 +15,20 @@ import (
 
 type Bot struct {
 	Server   string
+	Name     string
 	Cookies  *http.CookieJar
 	Logger   *slog.Logger
 	RoomCode string
 	ID       uuid.UUID
 }
 
-func NewBot(server string, roomCode string, logger *slog.Logger) *Bot {
+func NewBot(server string, roomCode string, name string, logger *slog.Logger) *Bot {
 	return &Bot{
 		ID:       uuid.New(),
 		Server:   server,
 		Logger:   logger,
 		RoomCode: roomCode,
+		Name:     name,
 	}
 }
 
@@ -51,7 +53,8 @@ func (b *Bot) Join() {
 // get to server/socket.io/?EIO=3&transport=polling&sid=sid
 
 func (b *Bot) sendData(sid string) error {
-	payload := fmt.Sprintf("42[1,\"%s\",\"%s\",%d,\"en\",false,\"%s\",null,null]", b.ID, b.ID.String()[:8], rand.Intn(46), b.RoomCode)
+	payload := fmt.Sprintf("42[1,\"%s\",\"%s\",%d,\"en\",false,\"%s\",null,null]", b.ID, b.Name, rand.Intn(46), b.RoomCode)
+
 	payload = fmt.Sprintf("%d:%s", len(payload), payload)
 	r := strings.NewReader(payload)
 
